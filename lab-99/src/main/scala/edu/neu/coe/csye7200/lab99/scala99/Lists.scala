@@ -4,7 +4,11 @@
 
 package edu.neu.coe.csye7200.lab99.scala99
 
+import edu.neu.coe.csye7200.lab99.scala99.P01.last
+
+import scala.+:
 import scala.annotation.tailrec
+import scala.collection.View.Empty
 
 object P00 {
   def flatten[X](xss: List[List[X]]): List[X] = {
@@ -28,48 +32,83 @@ object P00 {
 object P01 {
 
 //  @scala.annotation.tailrec
-  def last[X](xs: List[X]): X = ??? // TO BE IMPLEMENTED
+  def last[X](xs: List[X]): X = xs match {
+    case Nil => throw new NoSuchElementException("last: empty")
+    case h :: Nil => h
+    case _ :: t => last(t)
+  }
 }
 
 object P02 {
 
 //  @scala.annotation.tailrec
-  def penultimate[X](xs: List[X]): X = ??? // TO BE IMPLEMENTED
+  def penultimate[X](xs: List[X]): X = xs match {
+    case Nil => throw new NoSuchElementException("penultimate: empty")
+    case h :: _ :: Nil => h
+    case _ :: h => penultimate(h)
+  }
 }
 
 object P03 {
 
 //  @scala.annotation.tailrec
-  def kth[X](k: Int, xs: List[X]): X = ??? // TO BE IMPLEMENTED
+  def kth[X](k: Int, xs: List[X]): X = (k, xs) match {
+    case (n, _) if n < 0 => throw new NoSuchElementException("kth: error")
+    case (0, h :: _) => h
+    case (n, _ :: t) => kth(n - 1, t)
+    case (_, _) => throw new NoSuchElementException("kth: error")
+  }
 }
 
 object P04 {
-
-  def length[X](xs: List[X]): Int = ??? // TO BE IMPLEMENTED
+  def length[X](xs: List[X]): Int = {
+    @scala.annotation.tailrec
+    def inner[X](r: List[X], l : Int): Int = r match {
+      case Nil => l
+      case _ :: t => inner(t, l + 1)
+    }
+    inner(xs, 0)
+  }
 }
 
 object P05 {
 
   def reverse[X](xs: List[X]): List[X] = {
-    // TO BE IMPLEMENTED
-    ???
+    @scala.annotation.tailrec
+    def inner[X](r: List[X], l: List[X]): List[X] = (r, l) match {
+      case (Nil, list) => list
+      case (h :: t, Nil) => inner(t, List(h))
+      case (h :: t, list) => inner(t, h +: list)
+    }
+    inner(xs, Nil)
   }
 }
 
 object P06 {
 
-//@tailrec
-def isPalindrome[X](xs: List[X]): Boolean = ??? // TO BE IMPLEMENTED
+  //@tailrec
+  def isPalindrome[X](xs: List[X]): Boolean = {
+    @scala.annotation.tailrec
+    def reverse[X](r: List[X], l: List[X]): List[X] = (r, l) match {
+      case (Nil, list) => list
+      case (h :: t, Nil) => reverse(t, List(h))
+      case (h :: t, list) => reverse(t, h +: list)
+    }
+    def equals[X](r: List[X], l: List[X]): Boolean = (r, l) match {
+      case (Nil, Nil) => true
+      case (h1 :: t1, h2 :: t2) => (h1 == h2) && equals(t1, t2)
+      case (_, _) => false
+    }
+    equals(xs, reverse(xs, Nil))
+  }
 }
 
 object P07 {
 
   type ListAny = List[Any]
 
-  def flatten(xs: ListAny): ListAny = {
+  def flatten(xs: ListAny): ListAny = ???
     // TO BE IMPLEMENTED
-    ???
-  }
 }
 
 object P08 {
