@@ -75,10 +75,9 @@ object P05 {
 
   def reverse[X](xs: List[X]): List[X] = {
     @scala.annotation.tailrec
-    def inner[X](r: List[X], l: List[X]): List[X] = (r, l) match {
-      case (Nil, list) => list
-      case (h :: t, Nil) => inner(t, List(h))
-      case (h :: t, list) => inner(t, h +: list)
+    def inner[X](r: List[X], l: List[X]): List[X] = r match {
+      case Nil => l
+      case h :: t => inner(t, h :: l)
     }
     inner(xs, Nil)
   }
@@ -89,17 +88,11 @@ object P06 {
   //@tailrec
   def isPalindrome[X](xs: List[X]): Boolean = {
     @scala.annotation.tailrec
-    def reverse[X](r: List[X], l: List[X]): List[X] = (r, l) match {
-      case (Nil, list) => list
-      case (h :: t, Nil) => reverse(t, List(h))
-      case (h :: t, list) => reverse(t, h +: list)
+    def reverse[X](r: List[X], l: List[X]): List[X] = r match {
+      case Nil => l
+      case h :: t => reverse(t, h :: l)
     }
-    def equals[X](r: List[X], l: List[X]): Boolean = (r, l) match {
-      case (Nil, Nil) => true
-      case (h1 :: t1, h2 :: t2) => (h1 == h2) && equals(t1, t2)
-      case (_, _) => false
-    }
-    equals(xs, reverse(xs, Nil))
+    xs.equals(reverse(xs, Nil))
   }
 }
 
@@ -108,6 +101,13 @@ object P07 {
   type ListAny = List[Any]
 
   def flatten(xs: ListAny): ListAny = ???
+//  {
+//    def inner[X](l: ListAny, result: ListAny): ListAny = l match {
+//      case h :: t => inner(h, Nil) ::: inner(t, Nil) ::: result
+//      case e => result :+ e
+//    }
+//    inner(xs, Nil)
+//  }
     // TO BE IMPLEMENTED
 }
 

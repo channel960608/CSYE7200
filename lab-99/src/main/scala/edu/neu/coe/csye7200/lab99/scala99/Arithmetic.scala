@@ -15,7 +15,7 @@ class Arithmetic(val start: Int) {
           primes.takeWhile(_ <= Math.sqrt(start)).forall(start % _ != 0)
 
   // P33
-  def isCoprimeTo(n: Int): Boolean = ??? // TO BE IMPLEMENTED
+  def isCoprimeTo(n: Int): Boolean = gcd(n, start) == 1// TO BE IMPLEMENTED
 
   // P34
   def totientP34: Int = ??? // TO BE IMPLEMENTED
@@ -44,7 +44,7 @@ object Arithmetic {
 
   // P32
 //  @scala.annotation.tailrec
-  def gcd(m: Int, n: Int): Int = ??? // TO BE IMPLEMENTED
+  def gcd(m: Int, n: Int):  Int = if (n == 0) m else gcd(n, m % n)
 
   // P39
   def listPrimesInRange(r: Range): Seq[Int] = ??? // TO BE IMPLEMENTED
