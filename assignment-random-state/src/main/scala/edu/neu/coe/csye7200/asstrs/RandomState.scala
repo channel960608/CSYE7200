@@ -38,9 +38,7 @@ trait RandomState[T] {
     */
   // Hint: Think of the input and output, find the appropriate method that achieve this.
   // 10 points
-  def flatMap[U](f: T => RandomState[U]): RandomState[U] = {
-    f(get)
-  }
+  def flatMap[U](f: T => RandomState[U]): RandomState[U] = f(get)
 
   /**
     * @return a stream of T values
