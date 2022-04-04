@@ -9,7 +9,6 @@ import scala.language.postfixOps
 import scala.util._
 import scala.util.control.NonFatal
 import scala.xml.Node
-import scala.xml.NodeSeq.seqToNodeSeq
 
 /**
   * @author scalaprof
@@ -25,7 +24,7 @@ object WebCrawler extends App {
   def wget(u: URL): Future[Seq[URL]] = {
     // Hint: write as a for-comprehension, using the method createURL(Option[URL], String) to get the appropriate URL for relative links
     // 16 points.
-    def getURLs(ns: Node): Seq[Try[URL]] = for (n <- seqToNodeSeq(ns)) yield getURL(n.toString())
+    def getURLs(ns: Node): Seq[Try[URL]] = for (x <- ns \\ "a"; y <- x \ "@href") yield createURL(Option(u), y.text)
 
     def getLinks(g: String): Try[Seq[URL]] = {
       val ny = HTMLParser.parse(g) recoverWith { case f => Failure(new RuntimeException(s"parse problem with URL $u: $f")) }
@@ -33,6 +32,7 @@ object WebCrawler extends App {
     }
     // Hint: write as a for-comprehension, using getURLContent (above) and getLinks above. You might also need MonadOps.asFuture
     // 9 points.
+    println("Start to wget", u)
     for {
       s <- getURLContent(u)
       x <- MonadOps.asFuture(getLinks(s))

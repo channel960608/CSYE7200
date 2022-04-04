@@ -16,8 +16,11 @@ import scala.util._
   */
 class WebCrawlerSpec extends AnyFlatSpec with should.Matchers with Futures with ScalaFutures with TryValues with Inside {
 
-  val goodURL = "http://www1.coe.neu.edu/~rhillyard/indexSafe.html"
-  val badURL = "http://www1.coe.neu.edu/junk"
+  val goodURL = "https://www1.coe.neu.edu/~rhillyard/indexSafe.html"
+  val goodURLLocal = "file:///Users/channel/work/CSYE7200/assignment-web-crawler/src/main/resource/Robin%20Hillyard's%20Home%20Page.html"
+  val badURL = "https://www1.coe.neu.edu/junk"
+
+
 
   "getURLContent" should s"succeed for $goodURL" taggedAs Slow in {
     val wf = WebCrawler.getURLContent(new URL(goodURL))
@@ -41,8 +44,8 @@ class WebCrawlerSpec extends AnyFlatSpec with should.Matchers with Futures with 
     usfy.failure.exception should have message "no protocol: x//www.htmldog.com/examples/"
   }
 
-  "wget(Seq[URL])" should s"succeed for $goodURL, http://www.google.com/" taggedAs Slow in {
-    val ws = List(goodURL, "http://www.google.com/")
+  "wget(Seq[URL])" should s"succeed for $goodURL, https://www.google.com/" taggedAs Slow in {
+    val ws = List(goodURL, "https://www.google.com/")
     val uys = for (w <- ws) yield Try(new URL(w))
     val usesfy = for {us <- MonadOps.sequence(uys)} yield WebCrawler.wget(us)
     val usesf = MonadOps.flatten(usesfy)
@@ -73,7 +76,7 @@ class WebCrawlerSpec extends AnyFlatSpec with should.Matchers with Futures with 
   }
 
   "crawler(Seq[URL])" should s"succeed for $goodURL, depth 2" taggedAs Slow in {
-    val args = List(s"$goodURL")
+    val args = List(s"$goodURLLocal")
     val uys = for (arg <- args) yield Try(new URL(arg))
     val usft = for {us <- MonadOps.sequenceForgiving(uys)} yield WebCrawler.crawler(2, us)
     val usf = MonadOps.flatten(usft)
